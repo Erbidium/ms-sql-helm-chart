@@ -1,52 +1,44 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "mssql-latest.fullname" . }}
-  labels:
-    {{- include "mssql-latest.labels" . | nindent 4 }}
+  name: advert-service-db
 spec:
-  replicas: {{ .Values.replicas}}
+  replicas: 1
   selector:
     matchLabels:
-      {{- include "mssql-latest.selectorLabels" . | nindent 6 }}
+      app: advert-service-db
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "mssql-latest.selectorLabels" . | nindent 8 }}
+        app: advert-service-db
     spec:
-      hostname: {{ .Values.hostname}}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          command:
-            - /bin/bash
-            - -c
-            - cp /var/opt/config/mssql.conf /var/opt/mssql/mssql.conf && /opt/mssql/bin/sqlservr
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: advert-service-db
+          image: mcr.microsoft.com/mssql/server:2022-latest
+          imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: {{ .Values.containers.ports.containerPort}}
-          env:
-           - name: MSSQL_PID
-             value: "{{ .Values.MSSQL_PID.value}}"
-           - name: ACCEPT_EULA
-             value: "{{ .Values.ACCEPT_EULA.value | upper}}"
-           - name: MSSQL_AGENT_ENABLED
-             value: "{{ .Values.MSSQL_AGENT_ENABLED.value}}"
-           - name: SA_PASSWORD
-             valueFrom:
-              secretKeyRef:
-               name: mssql-secret
-               key: {{  template "mssql.sapassword" . }}
+            - containerPort: 1433
+          envFrom:
+            - configMapRef:
+                name: advert-service-db-config
+            - secretRef:
+                name: advert-service-db-secret
           volumeMounts:
-           - name: mssqldb
-             mountPath: /var/opt/mssql
+          - mountPath: /var/opt/mssql/data
+            name: sqldata-storage
       volumes:
-       - name: mssqldb
-         persistentVolumeClaim:
-          claimName: mssql-data
+      - name: sqldata-storage
+        persistentVolumeClaim:
+          claimName: advert-service-db-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: advert-db
+  labels:
+    app: mssql-db
+spec:
+  ports:
+    - port: 1433
+  selector:
+    app: advert-service-db
