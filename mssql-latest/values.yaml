@@ -30,15 +30,3 @@ podSecurityContext:
 service:
   type: LoadBalancer
   port: 1433
-
-pvc:
- StorageClass: "azure-disk"
- userdbaccessMode: ReadWriteOnce
- userdbsize: 5Gi
- userlogaccessMode: ReadWriteOnce
- userlogsize: 5Gi
- tempdbaccessMode: ReadWriteOnce
- tempsize: 2Gi
- mssqldataaccessMode: ReadWriteOnce
- mssqldbsize: 2Gi
-
