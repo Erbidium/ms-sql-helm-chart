@@ -1,0 +1,38 @@
+## mssql-server-linux image repository
+image: "microsoft/mssql-server-linux"
+## mssql-server-linux image version
+## ref: https://hub.docker.com/r/microsoft/mssql-server-linux
+##
+imageTag: "latest"
+
+## Specify a imagePullPolicy
+## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+imagePullPolicy: Always
+
+# Accept the license agreement
+acceptEULA: "Y"
+# TODO: Remove default password
+mssql-password: "Yukon900"
+
+## Persist data to a persitent volume
+persistence:
+  enabled: true
+
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  existingClaim: clunky-jaguar-mssql-server-linux
+
+  ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+  ## Default: volume.alpha.kubernetes.io/storage-class: default
+  ##
+  # storageClass:
+  accessMode: ReadWriteOnce
+  size: 8Gi
+  subPath: "mssql-db"
+resources:
+  requests:
+    memory: 4Gi
+    cpu: 1

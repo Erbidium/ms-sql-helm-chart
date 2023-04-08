@@ -22,7 +22,7 @@ spec:
             - configMapRef:
                 name: advert-service-db-config
             - secretRef:
-                name: advert-service-db-secret
+                name: {{ template "fullname" . }}
           volumeMounts:
           - mountPath: /var/opt/mssql/data
             name: sqldata-storage
