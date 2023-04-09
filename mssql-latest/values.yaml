@@ -2,7 +2,7 @@ image: "mcr.microsoft.com/mssql/server:2022"
 imageTag: "2022-latest"
 imagePullPolicy: IfNotPresent
 acceptEULA: "Y"
-mssql-password: "TestPassword"
+mssqlPassword: "TestPassword"
 persistence:
   enabled: true
   existingClaim: mssql-server-linux-claim
