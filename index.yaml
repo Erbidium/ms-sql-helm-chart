@@ -5,12 +5,12 @@ entries:
       catalog.cattle.io/hidden: "true"
     apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-04-09T12:55:42.6287378+03:00"
+    created: "2023-04-09T13:00:54.4851355+03:00"
     description: A Helm chart for Kubernetes
-    digest: 4c2f0a18e6f67505f858b15199adc6527cf945edde145fde99804b072a6c97fd
+    digest: 84b7a5d9f20d74235dbadedf6ca7ed836f416bf438be0480edfe799e18aa0770
     name: mssql-latest
     type: application
     urls:
     - https://erbidium.github.io/ms-sql-helm-chart/mssql-latest-0.1.1.tgz
     version: 0.1.1
-generated: "2023-04-09T12:55:42.6277332+03:00"
+generated: "2023-04-09T13:00:54.483135+03:00"
