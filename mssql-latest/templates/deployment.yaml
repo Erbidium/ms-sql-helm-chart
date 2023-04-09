@@ -33,16 +33,11 @@ spec:
               secretKeyRef:
                 name: {{ template "fullname" . }}
                 key: mssql-password
-          envFrom:
-            - configMapRef:
-                name: advert-service-db-config
-            - secretRef:
-                name: {{ template "fullname" . }}
           volumeMounts:
           - mountPath: /var/opt/mssql/data
-            name: sqldata-storage
+            name: data
       volumes:
-      - name: sqldata-storage
+      - name: data
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim | default (include "fullname" .) }}
 ---
