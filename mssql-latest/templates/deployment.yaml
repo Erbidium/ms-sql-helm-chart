@@ -1,21 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: advert-service-db
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: advert-service-db
+      app: {{ template "fullname" . }}
   template:
     metadata:
       labels:
-        app: advert-service-db
+        app: {{ template "fullname" . }}
     spec:
       containers:
-        - name: advert-service-db
-          image: mcr.microsoft.com/mssql/server:2022-latest
-          imagePullPolicy: IfNotPresent
+        - name: {{ template "fullname" . }}
+          image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+          imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
           ports:
             - containerPort: 1433
           envFrom:
@@ -28,17 +33,24 @@ spec:
             name: sqldata-storage
       volumes:
       - name: sqldata-storage
+      {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: advert-service-db-claim
+          claimName: {{ .Values.persistence.existingClaim | default (include "fullname" .) }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: advert-db
+  name: {{ template "fullname" . }}
   labels:
-    app: mssql-db
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   ports:
     - port: 1433
   selector:
-    app: advert-service-db
+    app: {{ template "fullname" . }}
