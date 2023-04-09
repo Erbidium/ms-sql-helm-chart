@@ -5,6 +5,5 @@ acceptEULA: "Y"
 mssqlPassword: "TestPassword"
 persistence:
   enabled: true
-  existingClaim: mssql-server-linux-claim
   accessMode: ReadWriteOnce
   size: 1Gi
