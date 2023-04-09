@@ -6,5 +6,5 @@ mssqlPassword: "TestPassword"
 persistence:
   enabled: true
   existingClaim: mssql-server-linux-claim
-  accessMode: ReadWriteMany
+  accessMode: ReadWriteOnce
   size: 1Gi
