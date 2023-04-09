@@ -1,19 +1,7 @@
-## mssql-server-linux image repository
-image: "microsoft/mssql-server-linux"
-## mssql-server-linux image version
-## ref: https://hub.docker.com/r/microsoft/mssql-server-linux
-##
+image: "mcr.microsoft.com/mssql/server:2022"
 imageTag: "latest"
-
-## Specify a imagePullPolicy
-## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
-## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-##
-imagePullPolicy: Always
-
-# Accept the license agreement
+imagePullPolicy: IfNotPresent
 acceptEULA: "Y"
-# TODO: Remove default password
 mssql-password: "Yukon900"
 
 ## Persist data to a persitent volume
