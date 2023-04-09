@@ -23,6 +23,16 @@ spec:
           imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
           ports:
             - containerPort: 1433
+          env:
+          - name: ACCEPT_EULA
+            value: {{ default "Y" .Values.acceptEULA | quote }}
+          - name: DATA
+            value: /var/opt/mssql/data
+          - name: SA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}
+                key: mssql-password
           envFrom:
             - configMapRef:
                 name: advert-service-db-config
@@ -33,12 +43,8 @@ spec:
             name: sqldata-storage
       volumes:
       - name: sqldata-storage
-      {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim | default (include "fullname" .) }}
-      {{- else }}
-        emptyDir: {}
-      {{- end -}}
 ---
 apiVersion: v1
 kind: Service

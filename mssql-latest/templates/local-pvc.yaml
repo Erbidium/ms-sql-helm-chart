@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: advert-service-db-claim
+  name: {{ template "fullname" . }}
 spec:
   accessModes:
-    - ReadWriteMany
+    - {{ .Values.persistence.accessMode | quote }}
   resources:
     requests:
-      storage: 1Gi
+      storage: {{ .Values.persistence.size | quote }}
